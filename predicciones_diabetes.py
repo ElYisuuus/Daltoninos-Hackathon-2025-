@@ -270,8 +270,7 @@ comparison_df = pd.DataFrame(comparison_data)
 print("\n", comparison_df.to_string(index=False))
 
 
-# --- 12. FUNCIÓN MEJORADA PARA PREDECIR ---
-# (Sigue siendo válida, la actualizamos para que use el nuevo umbral por defecto)
+# --- 12. FUNCIÓN 
 def predecir_diabetes_optimizado(bmi, hba1c, glucose, smoker, hypertension, heart_disease, gender, age, 
                                  threshold=optimal_threshold): # <-- Usa el nuevo umbral
     """
@@ -382,10 +381,8 @@ def extract_features(note):
     features_dict['hba1c_value'] = float(hba1c_match.group(1)) if hba1c_match else np.nan
 
     # 5. Glucosa (glucose_value)
-    # --- LÍNEA CORREGIDA ---
     glucose_match = re.search(r'glucose (?:level )?(?:is|of|reading is|measurement is) (\d+(?:\.\d+)?) mg/dl', note)
     if not glucose_match:
-         # --- LÍNEA CORREGIDA ---
          glucose_match = re.search(r'glucose of (\d+(?:\.\d+)?)', note) # Otro patrón
     features_dict['glucose_value'] = float(glucose_match.group(1)) if glucose_match else np.nan
 
@@ -453,10 +450,10 @@ print("\n... Realizando predicciones...")
 probabilidades_new = model.predict_proba(X_new_scaled_values)[:, 1]
 predicciones_new = (probabilidades_new >= optimal_threshold).astype(int)
 
-# --- 15.8. Crear y guardar el archivo CSV final (MODIFICADO PARA FORMATO) ---
+# --- 15.8. Crear y guardar el archivo CSV final ---
 df_output = pd.DataFrame({
     'patient_id': X_new['patient_id'],
-    'has_diabetes': predicciones_new  # <-- CAMBIO DE NOMBRE DE COLUMNA
+    'has_diabetes': predicciones_new 
 })
 
 # Convertir patient_id a string y añadir el prefijo 'patient_'
@@ -471,4 +468,5 @@ print("\n" + "="*60)
 print(f"¡ÉXITO! Predicciones (formato 'patient_id,has_diabetes') guardadas en '{output_filename}'")
 print("="*60)
 print(df_output.head())
+
 
